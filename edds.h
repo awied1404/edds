@@ -1,13 +1,7 @@
-#define LED_PLAYER_ONE 50
-#define LED_PLAYER_TWO 52
-#define LED_PLAYER_THREE 53
-#define BUT_PLAYER_ONE 49
-#define BUT_PLAYER_TWO 48
-#define BUT_PLAYER_THREE 47
-#define IR_RECEIVE_PIN 2
-
 #include "arduino.h"
-
+#include "Spotify.h"
+#include "EDDS_HW.h"
+#include "config.h"
 class EDDS
 {
   public:
@@ -16,9 +10,10 @@ class EDDS
     int isWinner();
   private:
     typedef enum e_remoteCommands {INVALID, ZERO, ONE} remoteCommands;
+    Spotify spotify;
+    EDDS_HW hw; 
     bool bDebug = true;
-    int aiScorePlayers[3] = {};
-    void init_hardware();
+    int aiScorePlayers[NUMBER_PLAYERS] = {};
     remoteCommands getRemoteCommand(int iCodedCommand);
-    int receiveRemoteCommand();
+    
 };

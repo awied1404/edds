@@ -1,26 +1,9 @@
 #include "edds.h"
-#include <IRremote.h>
-
-void EDDS::init_hardware()
-{
-    pinMode(LED_PLAYER_ONE, OUTPUT);
-    pinMode(LED_PLAYER_TWO, OUTPUT);
-    pinMode(LED_PLAYER_THREE, OUTPUT);
-    pinMode(BUT_PLAYER_ONE, INPUT_PULLUP);
-    pinMode(BUT_PLAYER_TWO, INPUT_PULLUP);
-    pinMode(BUT_PLAYER_THREE, INPUT_PULLUP);
-    IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK, USE_DEFAULT_FEEDBACK_LED_PIN);
-
-    if(this->bDebug == true)
-    {
-      Serial.begin(115200);
-      Serial.println("Hardware initialized correctly");
-    }
-}
 
 void EDDS::init()
 {
-  this->init_hardware();
+  this->hw.init();
+  this->spotify.init();
 }
 
 EDDS::remoteCommands EDDS::getRemoteCommand(int iCodedCommand)
@@ -39,17 +22,42 @@ EDDS::remoteCommands EDDS::getRemoteCommand(int iCodedCommand)
   return returnCommand;
 }
 
-int EDDS::receiveRemoteCommand()
+void EDDS::nextSong()
 {
-  int iReturnCommand = -1;
+  spotify.playNextSong();
+  hw.nextSong();
+  int iPlayerAnswered = hw.getPlayerToAnswer();
+  Serial.print("Player: ");
+  Serial.println(iPlayerAnswered);
   while(true)
   {
-    if(IrReceiver.decode())
+    int iRemoteCommand = hw.receiveRemoteCommand();
+    remoteCommands command = getRemoteCommand(iRemoteCommand);
+    if(command == ONE) // player answered correctly
     {
-      iReturnCommand = IrReceiver.decodedIRData.command;
-      IrReceiver.resume(); // Enable receiving of the next value
+      aiScorePlayers[iPlayerAnswered] += 1;
       break;
+    } 
+    else 
+    {
+      hw.resetLEDs();
+      if(hw.atLeastOnePlayerEnabled() == false)
+      {
+        break;
+      }
+      iPlayerAnswered = hw.getPlayerToAnswer();
     }
   }
-  return iReturnCommand;
+}
+
+int EDDS::isWinner()
+{
+  for(int i = 0; i < NUMBER_PLAYERS; i++)
+  {
+    if(aiScorePlayers[i] == POINTS_TO_WIN)
+    {
+      return i + 1;
+    }
+  }
+  return -1;
 }
