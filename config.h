@@ -1,0 +1,2 @@
+#define NUMBER_PLAYERS 3
+#define POINTS_TO_WIN 5
