@@ -3,6 +3,13 @@
 EDDS edds;
 
 void setup() {
+  const int buzzer = 8;
+  pinMode(buzzer, OUTPUT);
+  tone(buzzer, 4000);
+  delay(1000);
+  noTone(buzzer);
+
+  
   // put your setup code here, to run once:
   edds.init();
 }

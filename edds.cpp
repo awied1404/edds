@@ -27,8 +27,7 @@ void EDDS::nextSong()
   spotify.playNextSong();
   hw.nextSong();
   int iPlayerAnswered = hw.getPlayerToAnswer();
-  Serial.print("Player: ");
-  Serial.println(iPlayerAnswered);
+  spotify.pauseSong();
   while(true)
   {
     int iRemoteCommand = hw.receiveRemoteCommand();
@@ -40,6 +39,7 @@ void EDDS::nextSong()
     } 
     else 
     {
+      spotify.resumeSong();
       hw.resetLEDs();
       if(hw.atLeastOnePlayerEnabled() == false)
       {
