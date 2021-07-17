@@ -3,9 +3,10 @@
 class Spotify
 {
     public:
-        bool playNextSong();
-        bool pauseSong();
-        bool resumeSong();
+        void playNextSong();
+        void pauseSong();
+        void resumeSong();
+        void start();
         void init();
     private:
 

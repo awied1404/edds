@@ -9,8 +9,9 @@ public:
   bool next_track();
   bool pause();
   bool resume();
+  bool startEDDS();
 private:
-  typedef enum e_action {NEXT, PAUSE, RESUME} t_action;
+  typedef enum e_action {NEXT, PAUSE, RESUME, START} t_action;
   const char * ssid = "Kronenberg";
   const char * password = "sdfhnedro654jtr34";
   const char * url = "http://192.168.2.46:5000/spotify/pause";

@@ -4,6 +4,7 @@ void EDDS::init()
 {
   this->hw.init();
   this->spotify.init();
+  this->spotify.start();
 }
 
 EDDS::remoteCommands EDDS::getRemoteCommand(int iCodedCommand)
@@ -46,6 +47,7 @@ void EDDS::nextSong()
         break;
       }
       iPlayerAnswered = hw.getPlayerToAnswer();
+      spotify.pauseSong();
     }
   }
 }

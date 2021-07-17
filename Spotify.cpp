@@ -1,21 +1,25 @@
 #include "Spotify.h"
 
-bool Spotify::pauseSong()
+void Spotify::pauseSong()
 {
-    //TODO
+    Serial.println("PAUSE");
 }
 
-bool Spotify::playNextSong()
+void Spotify::playNextSong()
 {
-    //TODO
+    Serial.println("NEXT");
 }
 
-bool Spotify::resumeSong()
+void Spotify::resumeSong()
 {
-    //TODO
+    Serial.println("RESUME");
 }
 
 void Spotify::init()
 {
-    //TODO
+}
+
+void Spotify::start()
+{
+    Serial.println("START");
 }

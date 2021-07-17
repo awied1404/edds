@@ -43,6 +43,16 @@ bool SpotifyAPI::resume()
   return true;
 }
 
+bool SpotifyAPI::startEDDS()
+{
+  HTTPClient client;
+  char * url = getRequest(START);
+  client.begin(url);
+  int status = client.GET();
+  memset(acRequest, 20, 0);
+  return true;
+}
+
 char * SpotifyAPI::getRequest(t_action action)
 {
   char acAction[20] = {};
@@ -56,6 +66,9 @@ char * SpotifyAPI::getRequest(t_action action)
       break;
     case RESUME:
       snprintf(acAction, 20, "%s", "spotify/resume");
+      break;
+    case START:
+      snprintf(acAction, 20, "%s", "spotify/start");
       break;
   }
   snprintf(acRequest, 50, "%s%s%s", this->protocol, this->ip_address, acAction);
