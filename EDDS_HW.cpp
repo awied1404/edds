@@ -23,7 +23,7 @@ void EDDS_HW::init()
 
 int EDDS_HW::receiveRemoteCommand()
 {
-    
+    IrReceiver.enableIRIn();
     IrReceiver.resume(); // Enable receiving of the next value
     int iReturnCommand = -1;
     while(true)
@@ -34,13 +34,15 @@ int EDDS_HW::receiveRemoteCommand()
           break;
       }
     }
+    IrReceiver.disableIRIn();
     return iReturnCommand;
 }
 
 int EDDS_HW::getPlayerToAnswer()
 {
-    // TODO add time restrictions here e.g. 30 s per song
-    while(true)
+    unsigned long lTimeOut = 35000L;
+    long lStartTime = millis();
+    while(millis() - lStartTime < lTimeOut)
     {
         for(int i = 0; i < NUMBER_PLAYERS; i++)
         {
@@ -54,6 +56,7 @@ int EDDS_HW::getPlayerToAnswer()
         }
 
     }
+    return -1; // no player guessed a song
 }
 
 void EDDS_HW::nextSong()

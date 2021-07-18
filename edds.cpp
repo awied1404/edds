@@ -27,12 +27,22 @@ void EDDS::nextSong()
 {
   spotify.playNextSong();
   hw.nextSong();
-  int iPlayerAnswered = hw.getPlayerToAnswer();
-  spotify.pauseSong();
   while(true)
   {
-    int iRemoteCommand = hw.receiveRemoteCommand();
-    remoteCommands command = getRemoteCommand(iRemoteCommand);
+    int iPlayerAnswered = hw.getPlayerToAnswer();
+    if (iPlayerAnswered == -1)
+    {
+      break;
+    }
+    spotify.pauseSong();
+
+    remoteCommands command;
+    do
+    {
+      int iRemoteCommand = hw.receiveRemoteCommand();
+      command= getRemoteCommand(iRemoteCommand);
+    } while (command == INVALID);
+    
     if(command == ONE) // player answered correctly
     {
       aiScorePlayers[iPlayerAnswered] += 1;
@@ -40,14 +50,15 @@ void EDDS::nextSong()
     } 
     else 
     {
-      spotify.resumeSong();
       hw.resetLEDs();
       if(hw.atLeastOnePlayerEnabled() == false)
       {
         break;
       }
-      iPlayerAnswered = hw.getPlayerToAnswer();
-      spotify.pauseSong();
+      else
+      {
+        spotify.resumeSong();
+      }
     }
   }
 }

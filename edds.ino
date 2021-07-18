@@ -9,12 +9,15 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  //digitalWrite(LED_PLAYER_ONE, !digitalRead(BUT_PLAYER_ONE));
-  //digitalWrite(LED_PLAYER_TWO, !digitalRead(BUT_PLAYER_TWO));
-  //digitalWrite(LED_PLAYER_THREE, !digitalRead(BUT_PLAYER_THREE));
   if (edds.isWinner() == -1)
   {
     edds.nextSong();
+    delay(2000); // delay between two songs to guess
     Serial.println("Exited edds next song");
+  }
+  else{
+    Serial.print("And the Winner is: Player ");
+    Serial.println(edds.isWinner());
+    delay(3000);
   }
 }
